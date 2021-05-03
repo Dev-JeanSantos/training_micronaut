@@ -3,6 +3,7 @@ package br.com.zup.autores
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.validation.Validated
+import java.util.*
 import javax.inject.Inject
 import javax.transaction.Transactional
 import javax.validation.Valid
@@ -32,7 +33,6 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
             ) }
             return HttpResponse.ok(resposta)
         }
-
         //Outra Opção com JPQL
         val possivelAutor = autorRepository.buscaPorEmail(email)
 
@@ -49,6 +49,40 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
             autor.email,
             autor.descricao
         ))
+    }
+
+    @Put("/{id}")
+    fun atualiza(@PathVariable id: Long, nome: String, email: String, descricao: String) : HttpResponse<Any>{
+
+        val possivelAutor : Optional<Autor> = autorRepository.findById(id)
+
+        if (possivelAutor.isEmpty) {
+            return HttpResponse.notFound()
+        }
+        val autor = possivelAutor.get()
+
+        autor.nome = nome
+        autor.email = email
+        autor.descricao = descricao
+        autorRepository.update(autor)
+
+        return HttpResponse.ok(DetalhesDoAutorResponse(
+            autor.nome,
+            autor.email,
+            autor.descricao
+        ))
+    }
+
+    @Delete("/{id}")
+    fun Deleta(@PathVariable id: Long) : HttpResponse<Any>{
+
+        val possivelAutor = autorRepository.findById(id)
+
+        if (possivelAutor.isEmpty) {
+            return HttpResponse.notFound()
+        }
+        autorRepository.deleteById(id)
+        return HttpResponse.ok()
     }
 
 }
