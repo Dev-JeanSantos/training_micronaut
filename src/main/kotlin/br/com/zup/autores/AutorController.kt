@@ -32,7 +32,13 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
             ) }
             return HttpResponse.ok(resposta)
         }
-        val possivelAutor = autorRepository.findByEmail(email)
+
+        //Outra Opção com JPQL
+        val possivelAutor = autorRepository.buscaPorEmail(email)
+
+        //Outra Opção com Queries do Hibernate
+        //val possivelAutor = autorRepository.findByEmail(email)
+
         if(possivelAutor.isEmpty){
             return HttpResponse.notFound()
         }
