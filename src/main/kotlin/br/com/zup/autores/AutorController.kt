@@ -2,6 +2,7 @@ package br.com.zup.autores
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
+import io.micronaut.http.uri.UriBuilder
 import io.micronaut.validation.Validated
 import java.util.*
 import javax.inject.Inject
@@ -11,14 +12,19 @@ import javax.validation.Valid
 
 @Validated //Validação do DTO
 @Controller("/autores")
-class AutorController(@Inject val autorRepository: AutorRepository) {
+class AutorController(@Inject val autorRepository: AutorRepository){
     @Post
     @Transactional
-    fun cadastra(@Body @Valid request: NovoAutorRequest){
+    fun cadastra(@Body @Valid request: NovoAutorRequest): HttpResponse<Any>{
         println("DTO => $request")
         val autor = request.paraAutor()
         autorRepository.save(autor)
         println("Classe => ${autor.nome}")
+
+        val uri = UriBuilder.of("/autores/{id}")
+            .expand(mutableMapOf(Pair("id", autor.id)))
+        //Retorna um 201
+        return HttpResponse.created(uri)
     }
 
     @Get
@@ -66,6 +72,7 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
         autor.nome = nome
         autor.email = email
         autor.descricao = descricao
+        //Com o Transactional não há necessidade do update
         //autorRepository.update(autor)
 
         return HttpResponse.ok(DetalhesDoAutorResponse(
@@ -92,6 +99,18 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
         //Deletando pelo id
         //autorRepository.deleteById(id)
         return HttpResponse.ok()
+    }
+
+    @Get("/detalhes")
+    fun listaDetalhes() : HttpResponse<List<DetalhesDTOAutor>>{
+        val autores = autorRepository.findAll()
+
+        //converter autores em autoresDTO
+        val resposta = autores.map {
+            autor -> DetalhesDTOAutor(autor)
+        }
+
+        return HttpResponse.ok(resposta)
     }
 
 }

@@ -6,10 +6,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.4.32"
 }
-
+//Cria um contrutor em todas classes mapeada com @entity, @embedable e @MapperSuperClasse
 apply plugin: "kotlin-jpa"
+//Plugin pra setar a liberdade de abrir as classes
 apply plugin: "kotlin-allopen"
 
+//Abre todas classes dentro dos pacotes definido  na annotation
 allOpen {
     annotations("io.micronaut.http.annotation.Controller")
 }
