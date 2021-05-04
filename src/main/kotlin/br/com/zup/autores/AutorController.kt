@@ -13,6 +13,7 @@ import javax.validation.Valid
 @Controller("/autores")
 class AutorController(@Inject val autorRepository: AutorRepository) {
     @Post
+    @Transactional
     fun cadastra(@Body @Valid request: NovoAutorRequest){
         println("DTO => $request")
         val autor = request.paraAutor()
@@ -52,6 +53,7 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
     }
 
     @Put("/{id}")
+    @Transactional
     fun atualiza(@PathVariable id: Long, nome: String, email: String, descricao: String) : HttpResponse<Any>{
 
         val possivelAutor : Optional<Autor> = autorRepository.findById(id)
@@ -64,7 +66,7 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
         autor.nome = nome
         autor.email = email
         autor.descricao = descricao
-        autorRepository.update(autor)
+        //autorRepository.update(autor)
 
         return HttpResponse.ok(DetalhesDoAutorResponse(
             autor.nome,
@@ -74,6 +76,7 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
     }
 
     @Delete("/{id}")
+    @Transactional
     fun Deleta(@PathVariable id: Long) : HttpResponse<Any>{
 
         val possivelAutor = autorRepository.findById(id)
@@ -81,7 +84,13 @@ class AutorController(@Inject val autorRepository: AutorRepository) {
         if (possivelAutor.isEmpty) {
             return HttpResponse.notFound()
         }
-        autorRepository.deleteById(id)
+
+        //Possivel deletar pela entidade ou por id
+        val autor = possivelAutor.get()
+        autorRepository.delete(autor)
+
+        //Deletando pelo id
+        //autorRepository.deleteById(id)
         return HttpResponse.ok()
     }
 

@@ -7,6 +7,13 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version "1.4.32"
 }
 
+apply plugin: "kotlin-jpa"
+apply plugin: "kotlin-allopen"
+
+allOpen {
+    annotations("io.micronaut.http.annotation.Controller")
+}
+
 version = "0.1"
 group = "br.com.zup"
 
@@ -42,7 +49,7 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut.sql:micronaut-hibernate-jpa")
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.24'
-    
+
 }
 
 
