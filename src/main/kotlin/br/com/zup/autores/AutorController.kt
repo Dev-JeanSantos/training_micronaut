@@ -12,12 +12,17 @@ import javax.validation.Valid
 
 @Validated //Validação do DTO
 @Controller("/autores")
-class AutorController(@Inject val autorRepository: AutorRepository){
+class AutorController(@Inject val autorRepository: AutorRepository, val enderecoCliente : EnderecoCliente){
     @Post
     @Transactional
     fun cadastra(@Body @Valid request: NovoAutorRequest): HttpResponse<Any>{
+
         println("DTO => $request")
-        val autor = request.paraAutor()
+
+        //Chamada da requisição a um serviço externo
+        val enderecoResponse = enderecoCliente.consulta(request.cep)
+
+        val autor = request.paraAutor(enderecoResponse.body()!!)//!! -> Garante que não virá endereço nulo, pórem, deve criar um teste antes para evitar isso
         autorRepository.save(autor)
         println("Classe => ${autor.nome}")
 
@@ -36,7 +41,10 @@ class AutorController(@Inject val autorRepository: AutorRepository){
             val resposta = autores.map { autor -> DetalhesDoAutorResponse(
                 autor.nome,
                 autor.email,
-                autor.descricao
+                autor.descricao,
+                autor.endereco.logradouro,
+                autor.endereco.localidade,
+                autor.endereco.uf
             ) }
             return HttpResponse.ok(resposta)
         }
@@ -54,7 +62,10 @@ class AutorController(@Inject val autorRepository: AutorRepository){
         return HttpResponse.ok(DetalhesDoAutorResponse(
             autor.nome,
             autor.email,
-            autor.descricao
+            autor.descricao,
+            autor.endereco.logradouro,
+            autor.endereco.localidade,
+            autor.endereco.uf
         ))
     }
 
@@ -78,7 +89,10 @@ class AutorController(@Inject val autorRepository: AutorRepository){
         return HttpResponse.ok(DetalhesDoAutorResponse(
             autor.nome,
             autor.email,
-            autor.descricao
+            autor.descricao,
+            autor.endereco.logradouro,
+            autor.endereco.localidade,
+            autor.endereco.uf
         ))
     }
 
