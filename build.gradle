@@ -52,6 +52,15 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-hibernate-jpa")
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.24'
 
+
+    //testes
+    testAnnotationProcessor("io.micronaut:micronaut-inject-java")
+    testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.mockito:mockito-core:3.8.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testImplementation("com.h2database:h2")
+
 }
 
 

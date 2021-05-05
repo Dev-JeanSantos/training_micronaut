@@ -1,0 +1,5 @@
+INSERT INTO autor(criado_em, descricao, email, logradouro, localidade, uf, nome) values ('2021-05-04 16:36:45.791116','O Maior do Universo', 'jeancbsan@gmail.com', 'Rua Manoel Novis', 'Tanguá', 'RJ', 'JEAN CHARLES');
+INSERT INTO autor(criado_em, descricao, email, logradouro, localidade, uf, nome) values ('2021-05-04 16:36:45.791116','O Melhor da Região', 'camilladdsan@gmail.com', 'Rua Pinheiros', 'PORTO ALEGRE', 'RS', 'CAMILLA DUARTE');
+INSERT INTO autor(criado_em, descricao, email, logradouro, localidade, uf, nome) values ('2021-05-04 16:36:45.791116','Arte Ataca', 'jeancduasan@gmail.com', 'Avenida Maranhao', 'Salvado', 'BA', 'JEAN DUARTE');
+INSERT INTO autor(criado_em, descricao, email, logradouro, localidade, uf, nome) values ('2021-05-04 16:36:45.791116','A maior Estrela', 'melgameruser@gmail.com', 'Rua 22', 'São Paulo', 'SP', 'Melissa Duarte');
+INSERT INTO autor(criado_em, descricao, email, logradouro, localidade, uf, nome) values ('2021-05-04 16:36:45.791116','Viver e Amar', 'ipanemabrasil@gmail.com', 'Praça Seca', 'Peruíbe', 'SP', 'Marilia Medonça');
